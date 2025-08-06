@@ -41,7 +41,7 @@ export const idea = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: "detail",
+            name: "details",
             type: "markdown",
         }),
     ],

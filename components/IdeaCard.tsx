@@ -8,7 +8,7 @@ import {Skeleton} from "@/components/ui/skeleton";
 
 export type IdeaTypeCard = Omit<Idea, "author"> & { author?: Author };
 
-const StartupCard = ({post}: { post: IdeaTypeCard }) => {
+const IdeaCard = ({idea}: { idea: IdeaTypeCard }) => {
     const {
         _createdAt,
         views,
@@ -18,14 +18,14 @@ const StartupCard = ({post}: { post: IdeaTypeCard }) => {
         _id,
         image,
         description,
-    } = post;
+    } = idea;
 
     return (
-        <li className="startup-card group">
+        <li className="idea-card group">
             <div className="flex-between">
-                <p className="startup_card_date">{formatDate(_createdAt)}</p>
+                <p className="idea_card_date">{formatDate(_createdAt)}</p>
                 <div className="flex gap-1.5">
-                    <EyeIcon className="size-6 text-primary"/>
+                    <EyeIcon className="size-6 text-red-400"/>
                     <span className="text-16-medium">{views}</span>
                 </div>
             </div>
@@ -35,7 +35,7 @@ const StartupCard = ({post}: { post: IdeaTypeCard }) => {
                     <Link href={`/user/${author?._id}`}>
                         <p className="text-16-medium line-clamp-1">{author?.name}</p>
                     </Link>
-                    <Link href={`/startup/${_id}`}>
+                    <Link href={`/idea/${_id}`}>
                         <h3 className="text-26-semibold line-clamp-1">{title}</h3>
                     </Link>
                 </div>
@@ -50,32 +50,32 @@ const StartupCard = ({post}: { post: IdeaTypeCard }) => {
                 </Link>
             </div>
 
-            <Link href={`/startup/${_id}`}>
-                <p className="startup-card_desc">{description}</p>
+            <Link href={`/idea/${_id}`}>
+                <p className="idea-card_desc">{description}</p>
 
-                <img src={image} alt="placeholder" className="startup-card_img"/>
+                <img src={image} alt="placeholder" className="idea-card_img"/>
             </Link>
 
             <div className="flex-between gap-3 mt-5">
                 <Link href={`/?query=${category?.toLowerCase()}`}>
                     <p className="text-16-medium">{category}</p>
                 </Link>
-                <Button className="startup-card_btn" asChild>
-                    <Link href={`/startup/${_id}`}>Details</Link>
+                <Button className="idea-card_btn" asChild>
+                    <Link href={`/idea/${_id}`}>Details</Link>
                 </Button>
             </div>
         </li>
     );
 };
 
-export const StartupCardSkeleton = () => (
+export const IdeaCardSkeleton = () => (
     <>
         {[0, 1, 2, 3, 4].map((index: number) => (
             <li key={cn("skeleton", index)}>
-                <Skeleton className="startup-card_skeleton"/>
+                <Skeleton className="idea-card_skeleton"/>
             </li>
         ))}
     </>
 );
 
-export default StartupCard;
+export default IdeaCard;

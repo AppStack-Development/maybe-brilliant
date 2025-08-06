@@ -1,21 +1,21 @@
 import React from "react";
 import {client} from "@/sanity/lib/client";
-import {STARTUPS_BY_AUTHOR_QUERY} from "@/sanity/lib/queries";
-import IdeaCard, {StartupTypeCard} from "@/components/IdeaCard";
+import {IDEAS_BY_AUTHOR_QUERY} from "@/sanity/lib/queries";
+import IdeaCard, {IdeaTypeCard} from "@/components/IdeaCard";
 
-const UserStartups = async ({id}: { id: string }) => {
-    const startups = await client.fetch(STARTUPS_BY_AUTHOR_QUERY, {id});
+const UserIdeas = async ({id}: { id: string }) => {
+    const ideas = await client.fetch(IDEAS_BY_AUTHOR_QUERY, {id});
 
     return (
         <>
-            {startups.length > 0 ? (
-                startups.map((startup: StartupTypeCard) => (
-                    <IdeaCard key={startup._id} post={startup}/>
+            {ideas.length > 0 ? (
+                ideas.map((idea: IdeaTypeCard) => (
+                    <IdeaCard key={idea._id} idea={idea}/>
                 ))
             ) : (
-                <p className="no-result">No posts yet</p>
+                <p className="no-result">No Ideas yet</p>
             )}
         </>
     );
 };
-export default UserStartups;
+export default UserIdeas;
