@@ -17,7 +17,15 @@ const nextConfig: NextConfig = {
             },
         ],
     },
-    devIndicators: false,
+    experimental: {
+        ppr: "incremental",
+        after: true,
+    },
+    devIndicators: {
+        appIsrStatus: true,
+        buildActivity: true,
+        buildActivityPosition: "bottom-right",
+    },
 };
 
 export default withSentryConfig(withSentryConfig(withSentryConfig(nextConfig, {
