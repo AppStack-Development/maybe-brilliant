@@ -49,7 +49,7 @@ const Page = async ({params}: { params: Promise<{ id: string }> }) => {
                 />
 
                 <div className="space-y-5 mt-10 max-w-4xl mx-auto">
-                    <div className="flex-between gap-5">
+                    <div className="sm:flex-between gap-5">
                         <Link
                             href={`/user/${idea.author?._id}`}
                             className="flex gap-2 items-center mb-3"
@@ -63,8 +63,8 @@ const Page = async ({params}: { params: Promise<{ id: string }> }) => {
                             />
 
                             <div>
-                                <p className="text-20-medium">{idea.author.name}</p>
-                                <p className="text-16-medium !text-black-300">
+                                <p className="text-20-medium break-all">{idea.author.name}</p>
+                                <p className="text-16-medium !text-black-300 break-all">
                                     {idea.author.email}
                                 </p>
                             </div>
