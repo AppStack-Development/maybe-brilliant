@@ -3,6 +3,8 @@ import IdeaCard, {IdeaTypeCard} from "@/components/IdeaCard";
 import {IDEAS_QUERY} from "@/sanity/lib/queries";
 import {sanityFetch, SanityLive} from "@/sanity/lib/live";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home({
                                        searchParams,
                                    }: {
