@@ -1,21 +1,23 @@
 "use client"
 
-import Link from "next/link";
-import {X} from "lucide-react";
+import {useRouter} from "next/navigation"
+import {X} from "lucide-react"
 
 const SearchFormReset = () => {
-    const reset = () => {
-        const form = document.querySelector('.search-form') as HTMLFormElement;
+    const router = useRouter()
 
-        if (form) form.reset();
+    const reset = () => {
+        const form = document.querySelector(".search-form") as HTMLFormElement
+        if (form) form.reset()
+
+        router.push("/") // client-side redirect
     }
 
     return (
-        <button type="reset" onClick={reset}>
-            <Link href="/" className="search-btn text-white">
-                <X className="size-5"/>
-            </Link>
+        <button type="button" onClick={reset} className="search-btn text-white">
+            <X className="size-5"/>
         </button>
     )
 }
+
 export default SearchFormReset
