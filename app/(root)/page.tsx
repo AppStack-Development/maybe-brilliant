@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import SearchForm from "@/components/SearchForm";
 import IdeaCard, {IdeaTypeCard} from "@/components/IdeaCard";
 import {IDEAS_QUERY} from "@/sanity/lib/queries";
