@@ -1,29 +1,14 @@
 import {defineQuery} from "next-sanity";
 
-export const IDEAS_QUERY =
-    defineQuery(`*[_type == "idea" && defined(slug.current) && !defined($search) || title match $search || category match $search || author->name match $search] | order(_createdAt desc) {
-  _id, 
-  title, 
-  slug,
-  _createdAt,
-  author -> {
-    _id, name, image, bio
-  }, 
-  views,
-  description,
-  category,
-  image,
-}`);
-
 export const IDEA_BY_ID_QUERY =
     defineQuery(`*[_type == "idea" && _id == $id][0]{
-  _id, 
-  title, 
+  _id,
+  title,
   slug,
   _createdAt,
   author -> {
     _id, name, image, email
-  }, 
+  },
   views,
   description,
   category,
@@ -59,13 +44,13 @@ export const AUTHOR_BY_ID_QUERY = defineQuery(`
 
 export const IDEAS_BY_AUTHOR_QUERY =
     defineQuery(`*[_type == "idea" && author._ref == $id] | order(_createdAt desc) {
-  _id, 
-  title, 
+  _id,
+  title,
   slug,
   _createdAt,
   author -> {
     _id, name, image, bio
-  }, 
+  },
   views,
   description,
   category,
@@ -96,3 +81,41 @@ export const PLAYLIST_BY_SLUG_QUERY =
     details
   }
 }`);
+
+export const IDEAS_QUERY = defineQuery(`
+{
+  "total": count(*[
+    _type == "idea" &&
+    defined(slug.current) &&
+    (
+      !defined($search) ||
+      title match $search ||
+      category match $search ||
+      author->name match $search
+    )
+  ]),
+
+  "ideas": *[
+    _type == "idea" &&
+    defined(slug.current) &&
+    (
+      !defined($search) ||
+      title match $search ||
+      category match $search ||
+      author->name match $search
+    )
+  ] | order(_createdAt desc) [$start...$end] {
+    _id,
+    title,
+    slug,
+    _createdAt,
+    author->{
+      _id, name, image, bio
+    },
+    views,
+    description,
+    category,
+    image
+  }
+}
+`);

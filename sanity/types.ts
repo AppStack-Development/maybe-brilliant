@@ -186,56 +186,8 @@ export type SanityAssetSourceData = {
 export type AllSanitySchemaTypes = Playlist | Idea | Author | Markdown | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/lib/queries.ts
-// Variable: IDEAS_QUERY
-// Query: *[_type == "idea" && defined(slug.current) && !defined($search) || title match $search || category match $search || author->name match $search] | order(_createdAt desc) {  _id,   title,   slug,  _createdAt,  author -> {    _id, name, image, bio  },   views,  description,  category,  image,}
-export type IDEAS_QUERYResult = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  _createdAt: string;
-  author: null;
-  views: null;
-  description: null;
-  category: null;
-  image: null;
-} | {
-  _id: string;
-  title: null;
-  slug: null;
-  _createdAt: string;
-  author: null;
-  views: null;
-  description: null;
-  category: null;
-  image: string | null;
-} | {
-  _id: string;
-  title: string | null;
-  slug: null;
-  _createdAt: string;
-  author: null;
-  views: null;
-  description: string | null;
-  category: null;
-  image: null;
-} | {
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  _createdAt: string;
-  author: {
-    _id: string;
-    name: string | null;
-    image: string | null;
-    bio: null;
-  } | null;
-  views: number | null;
-  description: string | null;
-  category: string | null;
-  image: string | null;
-}>;
 // Variable: IDEA_BY_ID_QUERY
-// Query: *[_type == "idea" && _id == $id][0]{  _id,   title,   slug,  _createdAt,  author -> {    _id, name, image, email  },   views,  description,  category,  image,  details,}
+// Query: *[_type == "idea" && _id == $id][0]{  _id,  title,  slug,  _createdAt,  author -> {    _id, name, image, email  },  views,  description,  category,  image,  details,}
 export type IDEA_BY_ID_QUERYResult = {
   _id: string;
   title: string | null;
@@ -278,7 +230,7 @@ export type AUTHOR_BY_ID_QUERYResult = {
   image: string | null;
 } | null;
 // Variable: IDEAS_BY_AUTHOR_QUERY
-// Query: *[_type == "idea" && author._ref == $id] | order(_createdAt desc) {  _id,   title,   slug,  _createdAt,  author -> {    _id, name, image, bio  },   views,  description,  category,  image,}
+// Query: *[_type == "idea" && author._ref == $id] | order(_createdAt desc) {  _id,  title,  slug,  _createdAt,  author -> {    _id, name, image, bio  },  views,  description,  category,  image,}
 export type IDEAS_BY_AUTHOR_QUERYResult = Array<{
   _id: string;
   title: string | null;
@@ -320,17 +272,38 @@ export type PLAYLIST_BY_SLUG_QUERYResult = {
     details: string | null;
   }> | null;
 } | null;
+// Variable: IDEAS_QUERY
+// Query: {  "total": count(*[    _type == "idea" &&    defined(slug.current) &&    (      !defined($search) ||      title match $search ||      category match $search ||      author->name match $search    )  ]),  "ideas": *[    _type == "idea" &&    defined(slug.current) &&    (      !defined($search) ||      title match $search ||      category match $search ||      author->name match $search    )  ] | order(_createdAt desc) [$start...$end] {    _id,    title,    slug,    _createdAt,    author->{      _id, name, image, bio    },    views,    description,    category,    image  }}
+export type IDEAS_QUERYResult = {
+  total: number;
+  ideas: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    _createdAt: string;
+    author: {
+      _id: string;
+      name: string | null;
+      image: string | null;
+      bio: null;
+    } | null;
+    views: number | null;
+    description: string | null;
+    category: string | null;
+    image: string | null;
+  }>;
+};
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"idea\" && defined(slug.current) && !defined($search) || title match $search || category match $search || author->name match $search] | order(_createdAt desc) {\n  _id, \n  title, \n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, bio\n  }, \n  views,\n  description,\n  category,\n  image,\n}": IDEAS_QUERYResult;
-    "*[_type == \"idea\" && _id == $id][0]{\n  _id, \n  title, \n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, email\n  }, \n  views,\n  description,\n  category,\n  image,\n  details,\n}": IDEA_BY_ID_QUERYResult;
+    "*[_type == \"idea\" && _id == $id][0]{\n  _id,\n  title,\n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, email\n  },\n  views,\n  description,\n  category,\n  image,\n  details,\n}": IDEA_BY_ID_QUERYResult;
     "\n    *[_type == \"idea\" && _id == $id][0]{\n        _id, views\n    }\n": IDEA_VIEWS_QUERYResult;
     "\n*[_type == \"author\" && id == $id][0]{\n    _id,\n    id,\n    name,\n    email,\n    image,\n}\n": AUTHOR_BY_GOOGLE_SUB_ID_QUERYResult;
     "\n*[_type == \"author\" && _id == $id][0]{\n    _id,\n    id,\n    name,\n    email,\n    image,\n}\n": AUTHOR_BY_ID_QUERYResult;
-    "*[_type == \"idea\" && author._ref == $id] | order(_createdAt desc) {\n  _id, \n  title, \n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, bio\n  }, \n  views,\n  description,\n  category,\n  image,\n}": IDEAS_BY_AUTHOR_QUERYResult;
+    "*[_type == \"idea\" && author._ref == $id] | order(_createdAt desc) {\n  _id,\n  title,\n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, bio\n  },\n  views,\n  description,\n  category,\n  image,\n}": IDEAS_BY_AUTHOR_QUERYResult;
     "*[_type == \"playlist\" && slug.current == $slug][0]{\n  _id,\n  title,\n  slug,\n  select[]->{\n    _id,\n    _createdAt,\n    title,\n    slug,\n    author->{\n      _id,\n      name,\n      slug,\n      image,\n      bio\n    },\n    views,\n    description,\n    category,\n    image,\n    details\n  }\n}": PLAYLIST_BY_SLUG_QUERYResult;
+    "\n{\n  \"total\": count(*[\n    _type == \"idea\" &&\n    defined(slug.current) &&\n    (\n      !defined($search) ||\n      title match $search ||\n      category match $search ||\n      author->name match $search\n    )\n  ]),\n\n  \"ideas\": *[\n    _type == \"idea\" &&\n    defined(slug.current) &&\n    (\n      !defined($search) ||\n      title match $search ||\n      category match $search ||\n      author->name match $search\n    )\n  ] | order(_createdAt desc) [$start...$end] {\n    _id,\n    title,\n    slug,\n    _createdAt,\n    author->{\n      _id, name, image, bio\n    },\n    views,\n    description,\n    category,\n    image\n  }\n}\n": IDEAS_QUERYResult;
   }
 }
