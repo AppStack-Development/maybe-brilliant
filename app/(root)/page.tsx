@@ -7,7 +7,7 @@ import {sanityFetch, SanityLive} from "@/sanity/lib/live";
 import Pagination from "@/components/Pagination";
 
 export default async function Home({
-                                       searchParams,
+                                       searchParams
                                    }: {
     searchParams: Promise<{ query?: string, page?: string }>;
 }) {
@@ -15,12 +15,10 @@ export default async function Home({
     const resolvedParams = await searchParams;
     const query = resolvedParams.query || "";
     const currentPage = parseInt(resolvedParams.page || "1", 10);
-    const limit = 6;
+    const limit = 12;
     const start = (currentPage - 1) * limit;
     const end = currentPage * limit;
-
     const params = {search: query || null, start, end};
-
     const {data} = await sanityFetch({query: IDEAS_QUERY, params});
     const ideas: IdeaTypeCard[] = data?.ideas || [];
     const total: number = data?.total || 0;
@@ -61,6 +59,7 @@ export default async function Home({
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
+                        baseUrl="/"
                         query={query}
                     />
                 )}

@@ -6,19 +6,21 @@ import {ChevronLeft, ChevronRight} from "lucide-react";
 type PaginationProps = {
     currentPage: number;
     totalPages: number;
+    baseUrl: string;
     query?: string;
 };
 
 export default function Pagination({
                                        currentPage,
                                        totalPages,
+                                       baseUrl,
                                        query,
                                    }: PaginationProps) {
     const getHref = (page: number) => {
         const params = new URLSearchParams();
         if (query) params.set("query", query);
         if (page > 1) params.set("page", String(page));
-        return `/?${params.toString()}`;
+        return `${baseUrl}?${params.toString()}`;
     };
 
     // Define how many page numbers to show

@@ -229,24 +229,6 @@ export type AUTHOR_BY_ID_QUERYResult = {
   email: string | null;
   image: string | null;
 } | null;
-// Variable: IDEAS_BY_AUTHOR_QUERY
-// Query: *[_type == "idea" && author._ref == $id] | order(_createdAt desc) {  _id,  title,  slug,  _createdAt,  author -> {    _id, name, image, bio  },  views,  description,  category,  image,}
-export type IDEAS_BY_AUTHOR_QUERYResult = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  _createdAt: string;
-  author: {
-    _id: string;
-    name: string | null;
-    image: string | null;
-    bio: null;
-  } | null;
-  views: number | null;
-  description: string | null;
-  category: string | null;
-  image: string | null;
-}>;
 // Variable: PLAYLIST_BY_SLUG_QUERY
 // Query: *[_type == "playlist" && slug.current == $slug][0]{  _id,  title,  slug,  select[]->{    _id,    _createdAt,    title,    slug,    author->{      _id,      name,      slug,      image,      bio    },    views,    description,    category,    image,    details  }}
 export type PLAYLIST_BY_SLUG_QUERYResult = {
@@ -293,6 +275,27 @@ export type IDEAS_QUERYResult = {
     image: string | null;
   }>;
 };
+// Variable: IDEAS_BY_AUTHOR_QUERY
+// Query: {  "total": count(*[    _type == "idea" &&    author._ref == $id  ]),  "ideas": *[    _type == "idea" &&    author._ref == $id  ] | order(_createdAt desc) [$start...$end] {    _id,    title,    slug,    _createdAt,    author->{        _id, name, image, bio    },    views,    description,    category,    image  }}
+export type IDEAS_BY_AUTHOR_QUERYResult = {
+  total: number;
+  ideas: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    _createdAt: string;
+    author: {
+      _id: string;
+      name: string | null;
+      image: string | null;
+      bio: null;
+    } | null;
+    views: number | null;
+    description: string | null;
+    category: string | null;
+    image: string | null;
+  }>;
+};
 
 // Query TypeMap
 import "@sanity/client";
@@ -302,8 +305,8 @@ declare module "@sanity/client" {
     "\n    *[_type == \"idea\" && _id == $id][0]{\n        _id, views\n    }\n": IDEA_VIEWS_QUERYResult;
     "\n*[_type == \"author\" && id == $id][0]{\n    _id,\n    id,\n    name,\n    email,\n    image,\n}\n": AUTHOR_BY_GOOGLE_SUB_ID_QUERYResult;
     "\n*[_type == \"author\" && _id == $id][0]{\n    _id,\n    id,\n    name,\n    email,\n    image,\n}\n": AUTHOR_BY_ID_QUERYResult;
-    "*[_type == \"idea\" && author._ref == $id] | order(_createdAt desc) {\n  _id,\n  title,\n  slug,\n  _createdAt,\n  author -> {\n    _id, name, image, bio\n  },\n  views,\n  description,\n  category,\n  image,\n}": IDEAS_BY_AUTHOR_QUERYResult;
     "*[_type == \"playlist\" && slug.current == $slug][0]{\n  _id,\n  title,\n  slug,\n  select[]->{\n    _id,\n    _createdAt,\n    title,\n    slug,\n    author->{\n      _id,\n      name,\n      slug,\n      image,\n      bio\n    },\n    views,\n    description,\n    category,\n    image,\n    details\n  }\n}": PLAYLIST_BY_SLUG_QUERYResult;
     "\n{\n  \"total\": count(*[\n    _type == \"idea\" &&\n    defined(slug.current) &&\n    (\n      !defined($search) ||\n      title match $search ||\n      category match $search ||\n      author->name match $search\n    )\n  ]),\n\n  \"ideas\": *[\n    _type == \"idea\" &&\n    defined(slug.current) &&\n    (\n      !defined($search) ||\n      title match $search ||\n      category match $search ||\n      author->name match $search\n    )\n  ] | order(_createdAt desc) [$start...$end] {\n    _id,\n    title,\n    slug,\n    _createdAt,\n    author->{\n      _id, name, image, bio\n    },\n    views,\n    description,\n    category,\n    image\n  }\n}\n": IDEAS_QUERYResult;
+    "\n{\n  \"total\": count(*[\n    _type == \"idea\" &&\n    author._ref == $id\n  ]),\n\n  \"ideas\": *[\n    _type == \"idea\" &&\n    author._ref == $id\n  ] | order(_createdAt desc) [$start...$end] {\n    _id,\n    title,\n    slug,\n    _createdAt,\n    author->{\n        _id, name, image, bio\n    },\n    views,\n    description,\n    category,\n    image\n  }\n}\n": IDEAS_BY_AUTHOR_QUERYResult;
   }
 }

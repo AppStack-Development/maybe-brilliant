@@ -1,11 +1,7 @@
 import React from "react";
-import {client} from "@/sanity/lib/client";
-import {IDEAS_BY_AUTHOR_QUERY} from "@/sanity/lib/queries";
 import IdeaCard, {IdeaTypeCard} from "@/components/IdeaCard";
 
-const UserIdeas = async ({id}: { id: string }) => {
-    const ideas = await client.fetch(IDEAS_BY_AUTHOR_QUERY, {id});
-
+const UserIdeas = async ({ideas}: { ideas: IdeaTypeCard[] }) => {
     return (
         <>
             {ideas.length > 0 ? (

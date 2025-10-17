@@ -42,21 +42,6 @@ export const AUTHOR_BY_ID_QUERY = defineQuery(`
 }
 `);
 
-export const IDEAS_BY_AUTHOR_QUERY =
-    defineQuery(`*[_type == "idea" && author._ref == $id] | order(_createdAt desc) {
-  _id,
-  title,
-  slug,
-  _createdAt,
-  author -> {
-    _id, name, image, bio
-  },
-  views,
-  description,
-  category,
-  image,
-}`);
-
 export const PLAYLIST_BY_SLUG_QUERY =
     defineQuery(`*[_type == "playlist" && slug.current == $slug][0]{
   _id,
@@ -111,6 +96,32 @@ export const IDEAS_QUERY = defineQuery(`
     _createdAt,
     author->{
       _id, name, image, bio
+    },
+    views,
+    description,
+    category,
+    image
+  }
+}
+`);
+
+export const IDEAS_BY_AUTHOR_QUERY = defineQuery(`
+{
+  "total": count(*[
+    _type == "idea" &&
+    author._ref == $id
+  ]),
+
+  "ideas": *[
+    _type == "idea" &&
+    author._ref == $id
+  ] | order(_createdAt desc) [$start...$end] {
+    _id,
+    title,
+    slug,
+    _createdAt,
+    author->{
+        _id, name, image, bio
     },
     views,
     description,
