@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
         buildActivity: true,
         buildActivityPosition: "bottom-right",
     },
+    turbopack: {}
 };
 
 export default withSentryConfig(nextConfig, {
