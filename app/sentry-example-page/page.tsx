@@ -17,8 +17,18 @@ export default function Page() {
 
     useEffect(() => {
         async function checkConnectivity() {
-            const result = await Sentry.diagnoseSdkConnectivity();
-            setIsConnected(result !== 'sentry-unreachable');
+            const diagnose = (Sentry as any)["diagnoseSdkConnectivity"] as
+                | (() => Promise<string>)
+                | undefined;
+
+            if (!diagnose) {
+                // SDK version doesn't support it; don't block the button
+                setIsConnected(true);
+                return;
+            }
+
+            const result = await diagnose();
+            setIsConnected(result !== "sentry-unreachable");
         }
 
         checkConnectivity();
