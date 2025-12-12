@@ -5,6 +5,7 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Author, Idea} from "@/sanity/types";
 import {Skeleton} from "@/components/ui/skeleton";
+import { unsplashThumb } from "@/lib/unsplash";
 
 export type IdeaTypeCard = Omit<Idea, "author"> & { author?: Author };
 
@@ -53,7 +54,15 @@ const IdeaCard = ({idea}: { idea: IdeaTypeCard }) => {
             <Link href={`/idea/${_id}`}>
                 <p className="idea-card_desc">{description}</p>
 
-                <img src={image} alt="placeholder" className="idea-card_img"/>
+                <div className="relative w-full h-[164px]">
+                    <Image
+                        src={unsplashThumb(image, { w: 800, h: 328, q: 55 })}
+                        alt={title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
+                        className="object-cover rounded-[10px]"
+                    />
+                </div>
             </Link>
 
             <div className="flex-between gap-3 mt-5">
